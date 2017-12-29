@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE struts-config PUBLIC 
+"-//Apache Software Foundation//DTD Struts Configuration 1.3//EN"
+"http://struts.apache.org/dtds/struts-config_1_3.dtd">
+
+<struts-config>
+	<form-beans>
+		<form-bean name="loginForm" type="com.lms.app.form.LoginForm"/>
+		<form-bean name="linkForm" type="com.lms.app.form.LinkForm"/>
+		<form-bean name="createForm" type="com.lms.app.form.CreateForm"/>
+		<form-bean name="searchForm" type="com.lms.app.form.SearchForm"/>
+		<form-bean name="reportForm" type="com.lms.app.form.ReportForm"/>
+		
+	</form-beans>
+	
+	<global-forwards>
+		<forward name="login" path="/login.do"/>
+		<forward name="linkto" path="/linkto.do"/>
+		<forward name="create" path="/create.do"/>
+		<forward name="search" path="/search.do"/>
+		<forward name="searchbn" path="/searchbn.do"/>
+		<forward name="update" path="/update.do"/>
+		<forward name="search" path="/search.do"/>
+		<forward name="report" path="/report.do"/>
+		<forward name="postprint" path="/postprint.do"/>
+		<forward name="admin_update_bill" path="/admin_update_bill.do"/>
+		<forward name="admin_update_paid_date" path="/admin_update_paid_date.do"/>
+		<forward name="adminlinkto" path="/adminlinkto.do"/>
+		<forward name="getusers" path="/getusers.do"/>
+	</global-forwards>
+	
+	<action-mappings>
+		<action path="/login" type="com.lms.app.action.LoginAction" name="loginForm">
+		<forward name="success" path="/jsps/main/LMS_Main.jsp"/>
+		<forward name="failure" path="/jsps/login/index.jsp"/>
+		</action>
+		
+		<action path="/getusers" type="com.lms.app.action.ManageUsersAction">
+		</action>
+			
+		<action path="/postprint" type="com.lms.app.action.PrintAction">
+		<forward name="success" path="/jsps/main/LMS_Main.jsp"/>
+		</action>
+		
+		
+		<action path="/logout" type="com.lms.app.action.LogoutAction">
+		<forward name="logout" path="/jsps/logout/logout.jsp"/>
+		</action>
+		
+		<action path="/linkto" type="com.lms.app.action.LinkAction" name="linkForm" input="/jsps/main/LMS_Main.jsp">
+		<forward name="create" path="/jsps/billing/Create_Bill.jsp"/>
+		<forward name="update" path="/jsps/billing/Update_Bill.jsp"/>
+		<forward name="search" path="/jsps/billing/Search_Bills.jsp"/>
+		<forward name="main" path="/jsps/main/LMS_Main.jsp"/>
+		<forward name="report" path="/jsps/reports/Reports.jsp"/>
+		<forward name="admin_update_bill" path="/jsps/admin/Admin.jsp"/>
+		</action>
+		
+		<action path="/adminlinkto" type="com.lms.app.action.AdminAction">
+		<forward name="multibill" path="/jsps/admin/MultiBillPage.jsp"/>
+		<forward name="pass" path="/jsps/admin/UnderConstruction.jsp"/>
+		<forward name="users" path="/jsps/admin/UnderConstruction.jsp"/>
+		<forward name="masters" path="/jsps/admin/UnderConstruction.jsp"/>
+		</action>
+		
+		
+		<action path="/create" type="com.lms.app.action.CreateAction">
+		<forward name="success" path="/jsps/printservices/PrintBill.jsp"/>
+		<forward name="failure" path="/jsps/billing/Create_Bill.jsp"/>
+		</action>
+		
+		<action path="/searchbn" type="com.lms.app.action.UpdateSearchAction">
+		<forward name="success" path="/jsps/billing/Update_Details.jsp"/>
+		<forward name="failure" path="/jsps/billing/Update_Search.jsp"/>
+		</action>
+		
+		<action path="/update" type="com.lms.app.action.UpdateAction">
+		<forward name="success" path="/jsps/billing/blank.jsp"/>
+		<forward name="successprint" path="/jsps/printservices/PrintBill.jsp"/>
+		<forward name="failure" path="/jsps/billing/Update_Search.jsp"/>
+		</action>
+		
+		<action path="/search" type="com.lms.app.action.SearchAction">
+		<forward name="success" path="/jsps/billing/Search_Results.jsp"/>
+		<forward name="failure" path="/jsps/billing/Search_Bills.jsp"/>
+		</action>
+		
+		<action path="/report" type="com.lms.app.action.ReportAction">
+		<forward name="success" path="/jsps/reports/Report_Results.jsp"/>
+		<forward name="failure" path="/jsps/main/Reports.jsp"/>
+		</action>
+		
+		<action path="/printreport" type="com.lms.app.action.PrintReportAction">
+		<forward name="success" path="/jsps/printservices/PrintReport.jsp"/>
+		</action>
+		
+		<action path="/admin_update_bill" type="com.lms.app.action.AdminUpdateMultiBillsAction">
+		<forward name="success" path="/jsps/admin/AdminUpdateMultiBillsList.jsp"/>
+		<forward name="failure" path="/jsps/admin/Admin.jsp"/>
+		</action>
+		
+		<action path="/admin_update_paid_date" type="com.lms.app.action.AdminUpdateBills">
+		<forward name="success" path="/jsps/main/LMS_Main.jsp"/>
+		<forward name="failure" path="/jsps/main/LMS_Main.jsp"/>
+		</action>
+		
+	</action-mappings>
+<message-resources parameter="MessageResource"></message-resources>
+
+</struts-config>

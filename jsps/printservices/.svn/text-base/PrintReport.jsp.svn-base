@@ -1,0 +1,124 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"
+    import="com.vo.BillVo,com.vo.BillDetailsVo,java.util.ArrayList,com.vo.ReportResultsVo"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Print Report</title>
+<script language="JavaScript">
+function printreport(){
+	window.print();
+	setTimeout("window.close()",4000);
+}
+</SCRIPT>
+<STYLE>
+.resultstyle{
+	width: 70px;
+	text-align: left;
+	background-color:#FFFFFF;
+	color:#000000;
+	font-family:Draft;
+	font-size:9px;
+}
+.resultstyle2{
+	width: 350px;
+	text-align: left;
+	background-color:#FFFFFF;
+	color:#000000;
+	font-family:Draft;
+	font-size:9px;
+}
+.resultstyle3{
+	width: 30px;
+	text-align: left;
+	background-color:#FFFFFF;
+	color:#000000;
+	font-family:Draft;
+	font-size:9px;
+}
+</STYLE>
+</head>
+<body width ="800">
+<Table id="billdetails" border="0" width="96%">
+			<TR>
+		        
+		        <TD>
+		        	B.Dt
+		        </TD>
+		        <TD>
+		        	B.Num
+		        </TD>
+		        <TD> 
+		        	C.Name
+		        </TD>
+		        <TD>
+		        	Desc
+		        </TD>
+		        <TD>
+		        	Cnt
+		        </TD>
+		        <TD>
+		        	Bill Amt
+		        </TD>
+		        <TD>
+		        	Paid Amt
+		        </TD>
+		        <TD  >
+		        	Paid Dt
+		        </TD>
+	        </TR>
+	        <%! ArrayList<ReportResultsVo> searchResults = new ArrayList<ReportResultsVo>();
+			%>
+	        <%
+	        	//ArrayList<ReportResultsVo> searchResults = new ArrayList<ReportResultsVo>();
+				
+	        searchResults = (ArrayList<ReportResultsVo>)request.getAttribute("searchresults");
+				if (searchResults.size()==0){
+			%>	
+				<TR>
+				<TD colspan="9" width="100%" class="errorstyle">
+						No Results found, Please enter different search criteria
+				</TD>
+				</TR>	
+			<%}else{
+		  			int count=1;
+					for(ReportResultsVo srvo : searchResults){
+				%>
+				<TR>
+				<TD class="resultstyle">
+					<%=srvo.getBilldate()%>
+				</TD>
+				<TD class="resultstyle" >
+					<%=srvo.getBillnumber()%>
+				</TD>				
+				<TD class="resultstyle" >
+					<%=srvo.getCustomername()%>
+				</TD>
+				<TD NOWRAP class="resultstyle2" >
+					<%=srvo.getBilldesc()%>
+				</TD>
+				<TD class="resultstyle3" >
+					<%=srvo.getTotalCount()%>
+				</TD>
+				
+				<TD class="resultstyle3" >
+					<%=srvo.getBillamount()%>
+				</TD>
+				<TD class="resultstyle3" >
+					<%=srvo.getBillpaidamount()%>
+				</TD>
+				<TD class="resultstyle" >
+					<%=srvo.getBillPaidDate()==null?"":srvo.getBillPaidDate()%>
+				</TD>
+				</TR>		
+			 <%
+				 count++;
+				}
+			 } %> 
+			 </Table>
+		<script>
+		printreport();
+		</script>
+</body>
+</html>

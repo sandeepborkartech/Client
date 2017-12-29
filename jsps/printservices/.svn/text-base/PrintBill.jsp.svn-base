@@ -1,0 +1,186 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1" import="com.vo.BillVo,com.vo.BillDetailsVo,java.util.ArrayList" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Print</title>
+<script language="JavaScript">
+DA = (document.all) ? 1 : 0
+
+function HandleError()
+{
+alert("\nNothing was printed. \n\nIf you do want to print this page, then\nclick on the printer icon in the toolbar above.")
+return true;
+}
+function submitclicked(){
+	window.print();
+	setTimeout("document.forms[0].submit()",6000);
+}
+</SCRIPT>
+
+
+<script language="VBScript">
+
+Sub window_onunload()
+On Error Resume Next
+Set WB = nothing
+On Error Goto 0
+End Sub
+
+Sub Print()
+OLECMDID_PRINT = 6
+OLECMDEXECOPT_DONTPROMPTUSER = 2
+OLECMDEXECOPT_PROMPTUSER = 1
+
+
+On Error Resume Next
+
+If DA Then
+call WB.ExecWB(OLECMDID_PRINT, OLECMDEXECOPT_DONTPROMPTUSER,1)
+
+Else
+call WB.IOleCommandTarget.Exec(OLECMDID_PRINT ,OLECMDEXECOPT_DONTPROMPTUSER,"","","")
+
+End If
+
+If Err.Number <> 0 Then
+If DA Then 
+Alert("Nothing Printed :" & err.number & " : " & err.description)
+Else
+HandleError()
+End if
+End If
+On Error Goto 0
+End Sub
+
+If DA Then
+wbvers="8856F961-340A-11D0-A96B-00C04FD705A2"
+Else
+wbvers="EAB22AC3-30C1-11CF-A7EB-0000C05BAE0B"
+End If
+
+document.write "<object ID=""WB"" WIDTH=0 HEIGHT=0 CLASSID=""CLSID:"
+document.write wbvers & """> </object>"
+</script>
+</head>
+<body>
+<%
+	BillVo billvo = (BillVo)request.getAttribute("bill");
+%>
+<form action="/LMS/postprint.do" >
+<FONT size="2px" face="draft">
+<br>
+<Table border="0" width="450" bordercolor="#000000"> 
+	<input type="hidden" name="actioncalled" value="c"/>
+		<TR>
+		</TR>
+		<BR>
+		<BR>
+			 <TR>   
+			 	<TD width="5%">
+			 		
+			 	</TD>
+			 	<TD width="15%">
+			 		<%=billvo.getCustomerName()==null?"":billvo.getCustomerName()%>	
+			 	</TD>
+			 	<TD width="30%">
+			 		
+			 	</TD>
+			 	<TD width="15%">
+			 		<%=billvo.getBillnumber()==null?"":billvo.getBillnumber()%>
+			 	</TD>
+		     <TD  width="18%">
+			 		 
+			 </TD>
+			 <TD width="20%">
+			 		<%=billvo.getBilldate()==null?"":billvo.getBilldate()%>
+			 </TD>
+			 </TR>
+			 </Table>
+			 </FONT>
+			 <FONT size="2px" face="draft">
+			 <Table border="0" width="400" bordercolor="#000000">	     
+					<TR>
+			   		<TD colspan="1">
+			   		 CLTH.
+			   		</TD >
+			   		<TD colspan="1">
+			   		SRVC.
+			   		</TD>  								
+			   		 <TD colspan="1">
+			   		 QTY.
+			   		 </TD>
+			   		 <TD colspan="1">
+			   		 TLT. PRC.
+			   		 </TD>
+			   		  <TD colspan="1">
+			   		 CMTS.
+			   		 </TD>
+			   	</TR> 
+					<% ArrayList<BillDetailsVo> arrBD = billvo.getArrBillDetails();
+					
+				     int count = 0;
+					   for(BillDetailsVo bd : arrBD){   
+					%>
+					        <TR>
+					   		<TD colspan="1">
+					   		 <%=bd.getClothdesc() %>
+					   		</TD >
+					   		<TD colspan="1">
+					   		 <%=bd.getServiceshortdesc() %>
+					   		</TD>  								
+					   		 <TD colspan="1">
+					   		 <%=bd.getQuanity()%>
+					   		 </TD>
+					   		 <TD colspan="1">
+					   		 <%=bd.getTotalprice() %>
+					   		 </TD>
+					   		  <TD colspan="1">
+					   		 <%=bd.getComments()==null?"":bd.getComments()%>
+					   		 </TD>
+					   	</TR> 
+				    <%
+					count++;	   
+				    	}  
+					%>
+					</Table>
+					</FONT>
+					<FONT size="2px" face="draft">
+					<BR>
+					<Table border="0" width="450" bordercolor="#000000">
+					<TR align="right">
+					<TD width="5%"/>
+					<TD width="10%">
+					<% if(billvo.getAdvPay()>0){ %>
+					Advance payment:<%=billvo.getAdvPay()%>
+					<%} %>
+					</TD>
+					
+					<TD width="10%">
+					Quantity:<%=billvo.getTotalCount()%>
+					</TD>
+					<TD width="10%">
+						Total:<%=billvo.getBillamount()%>
+					</TD>
+					<% if (billvo.getBillpaidamount()>0){
+					%>
+					<TD width="10%">
+						Paid:<%=billvo.getBillpaidamount()%>
+					</TD>
+					<%} %>
+					
+					</TR>
+					<TR  align="center">
+					<TD width="100%" align="center"><br>
+						<%=billvo.getSplcomments() %>
+					</TD>
+					</TR>
+				</Table>	
+</FONT>
+<script>
+submitclicked();
+</script>
+</form>	
+</body>
+</html>
